@@ -5,43 +5,49 @@ import { motion, AnimatePresence } from "framer-motion";
 // 데이터 영역 - 여기를 수정해서 질문/교수님 정보 변경하세요!
 // ============================================================
 
-// 밸런스게임 질문 5개 (나중에 자유롭게 수정 가능)
-// optionA / optionB 의 trait 값이 매칭에 사용됩니다.
+// 밸런스게임 질문 6개
+// 각 선택지의 trait 값이 매칭에 사용됩니다.
 const QUESTIONS = [
   {
     id: 1,
-    question: "수학 연구를 한다면?",
-    optionA: { label: "혼자 깊게 파고들기", trait: "solo" },
-    optionB: { label: "동료들과 함께 토론하며", trait: "team" },
+    question: "더 닮고 싶은 수학자는?",
+    optionA: { label: "가우스", trait: "gauss" },
+    optionB: { label: "오일러", trait: "euler" },
   },
   {
     id: 2,
-    question: "증명을 할 때 더 끌리는 스타일은?",
-    optionA: { label: "직관적이고 우아한 증명", trait: "intuitive" },
-    optionB: { label: "엄밀하고 빈틈없는 증명", trait: "rigorous" },
+    question: "내가 선호하는 연구 스타일은?",
+    optionA: { label: "혼자 깊게 파고드는 연구", trait: "solo" },
+    optionB: { label: "동료들과 토론하는 연구", trait: "team" },
   },
   {
     id: 3,
-    question: "더 흥미로운 분야는?",
-    optionA: { label: "순수수학 (이론의 아름다움)", trait: "pure" },
-    optionB: { label: "응용수학 (현실 문제 해결)", trait: "applied" },
+    question: "수학을 할 때 더 중요한 것은?",
+    optionA: { label: "직관", trait: "intuitive" },
+    optionB: { label: "논리", trait: "logical" },
   },
   {
     id: 4,
-    question: "공부할 때 나는?",
-    optionA: { label: "조용한 새벽형 인간", trait: "morning" },
-    optionB: { label: "불타는 야행성", trait: "night" },
+    question: "0은 자연수이다 vs 아니다",
+    optionA: { label: "0은 자연수다", trait: "zero_yes" },
+    optionB: { label: "0은 자연수가 아니다", trait: "zero_no" },
   },
   {
     id: 5,
-    question: "막히는 문제를 만나면?",
-    optionA: { label: "끝까지 붙잡고 늘어진다", trait: "persistent" },
-    optionB: { label: "잠시 떠나 다른 일을 한다", trait: "flexible" },
+    question: "둘 중 하나만 평생 못 쓴다면?",
+    optionA: { label: "'왜냐하면(∵)' 평생 안 쓰기", trait: "no_because" },
+    optionB: { label: "'그래서(∴)' 평생 안 쓰기", trait: "no_therefore" },
+  },
+  {
+    id: 6,
+    question: "더 나은 수학자의 삶은?",
+    optionA: { label: "밀레니엄 난제 다 풀었지만 발설 못 함", trait: "secret_genius" },
+    optionB: { label: "나만 아는 난제 풀고 마음껏 자랑하기", trait: "loud_genius" },
   },
 ];
 
 // 교수님 데이터 (샘플 - 실제 정보로 교체하세요!)
-// traits 에 각 질문에 해당하는 성향을 적어두면 답변과 비교해서 매칭됩니다.
+// traits 배열은 위 6개 질문 순서대로, 그 교수님이 어떤 답을 할지 trait 값을 적어주세요.
 const PROFESSORS = [
   {
     id: "p1",
@@ -49,9 +55,9 @@ const PROFESSORS = [
     photo: "👨‍🏫",
     field: "대수기하학",
     oneLiner: "수식 속의 우주를 탐험하는 이론가",
-    traits: ["solo", "rigorous", "pure", "night", "persistent"],
+    traits: ["gauss", "solo", "logical", "zero_yes", "no_because", "secret_genius"],
     comment:
-      "당신은 끈질긴 사색가! 한 문제를 며칠씩 붙들고 늘어지는 모습이 ○○ 교수님과 똑 닮았어요. 둘이 만나면 밤새 수식 이야기로 꽃을 피울 듯.",
+      "당신은 진중하고 깊이 있는 사색가! 한 문제를 며칠씩 붙들고 늘어지는 모습이 ○○ 교수님과 똑 닮았어요. 둘이 만나면 밤새 수식 이야기로 꽃을 피울 듯.",
   },
   {
     id: "p2",
@@ -59,7 +65,7 @@ const PROFESSORS = [
     photo: "👩‍🏫",
     field: "응용수학 / 수치해석",
     oneLiner: "현실의 문제를 수학으로 푸는 해결사",
-    traits: ["team", "rigorous", "applied", "morning", "flexible"],
+    traits: ["euler", "team", "logical", "zero_yes", "no_therefore", "loud_genius"],
     comment:
       "당신은 협업형 문제해결사! 새로운 시각으로 문제를 바라보는 능력이 ○○ 교수님과 닮았어요. 함께라면 어떤 난제도 풀어낼 듯.",
   },
@@ -69,7 +75,7 @@ const PROFESSORS = [
     photo: "🧑‍🏫",
     field: "위상수학",
     oneLiner: "공간을 자유롭게 변형하는 직관의 대가",
-    traits: ["solo", "intuitive", "pure", "night", "flexible"],
+    traits: ["euler", "solo", "intuitive", "zero_no", "no_therefore", "loud_genius"],
     comment:
       "당신은 직관과 자유로움의 소유자! 틀에 갇히지 않는 사고방식이 ○○ 교수님과 비슷해요. 둘 다 산책하다가 영감 받는 스타일!",
   },
@@ -79,7 +85,7 @@ const PROFESSORS = [
     photo: "👨‍🔬",
     field: "확률론 / 통계학",
     oneLiner: "불확실성 속에서 패턴을 찾는 탐험가",
-    traits: ["team", "intuitive", "applied", "morning", "persistent"],
+    traits: ["gauss", "team", "intuitive", "zero_yes", "no_because", "loud_genius"],
     comment:
       "당신은 데이터를 사랑하는 끈기형! ○○ 교수님과 함께라면 모든 일에 확률을 계산하며 즐겁게 살아갈 듯해요.",
   },
@@ -89,7 +95,7 @@ const PROFESSORS = [
     photo: "👩‍🔬",
     field: "정수론",
     oneLiner: "수의 신비에 빠진 영원한 탐구자",
-    traits: ["solo", "rigorous", "pure", "morning", "persistent"],
+    traits: ["gauss", "solo", "logical", "zero_no", "no_therefore", "secret_genius"],
     comment:
       "당신은 진정한 수학 덕후! 새벽까지 한 문제를 파고드는 집념이 ○○ 교수님 그 자체. 둘 다 소수(prime)에 진심일 것 같아요.",
   },
@@ -99,7 +105,7 @@ const PROFESSORS = [
     photo: "🧑‍🔬",
     field: "미분방정식 / 동역학",
     oneLiner: "변화하는 세계의 흐름을 읽는 분석가",
-    traits: ["team", "intuitive", "applied", "night", "flexible"],
+    traits: ["euler", "team", "intuitive", "zero_yes", "no_because", "loud_genius"],
     comment:
       "당신은 유연한 사고의 소유자! 변화를 두려워하지 않는 모습이 ○○ 교수님과 닮았어요. 함께라면 매일이 새로운 모험!",
   },
@@ -136,7 +142,7 @@ export default function App() {
         if (t === userAnswers[i]) matches += 1;
       });
       const rate = Math.round((matches / QUESTIONS.length) * 100);
-      // 매칭률이 너무 낮으면 살짝 보정 (40% 이하면 +30~40 정도 보정해서 재미있게)
+      // 매칭률이 너무 낮으면 살짝 보정 (재미있게)
       const displayRate = rate < 40 ? rate + 45 : rate < 60 ? rate + 25 : rate + 10;
       return { ...prof, rate: Math.min(displayRate, 99) };
     });
@@ -304,7 +310,7 @@ function IntroScreen({ onStart }) {
         }}
       >
         <div className="text-lg leading-relaxed" style={{ color: "var(--ink)" }}>
-          <span className="font-bold text-xl">5개의 밸런스 게임</span>으로
+          <span className="font-bold text-xl">6개의 밸런스 게임</span>으로
           <br />
           나와 가장 잘 맞는
           <br />
